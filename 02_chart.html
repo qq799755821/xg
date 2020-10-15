@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    canvas{
+        border: 1px solid #000;
+    }
+</style>
+<body>
+    <canvas class="canvas"></canvas>
+
+<script>
+let   data=[{
+    label:"服装鞋帽",
+    value:300
+},{
+    label:"家具家居",
+    value:400
+},{
+    label:"手机电视",
+    value:250
+},{
+    label:"洗衣机",
+    value:350
+},{
+    label:"超级绿帽",
+    value:300
+}]
+
+let  canele=document.querySelector('.canvas');
+console.log(canele)
+canele.width=540
+canele.height=600
+let ctx= canele.getContext('2d')
+//设置间距宽度
+let width=50
+//计算间距
+// 间距=( 画布总宽度-(数量*每个的宽度) )  /   数量+1
+let distance=Math.ceil((canele.width-data.length*width)/(data.length+1))
+console.log(distance)
+//绘制图形
+    for(let i=0;i<data.length;i++){
+      let x=(i+1)*distance+i*width
+      let y=canele.height-data[i].value
+      //设置填充颜色 
+        ctx.fillStyle= i%2==1? "green" :'red'
+        ctx.fillRect(x,y,width,data[i].value)
+
+     //设置本文大小
+     ctx.font='20px Microsoft Yahei'
+     //设置文本颜色
+     ctx.fillStyle="#000"
+     //设置本文对齐方式
+     ctx.textAlign='center'
+
+        //设置数量标识
+        ctx.fillText(data[i].value,x+Math.ceil(width/2),y-10)
+    }
+
+</script>
+</body>
+</html>

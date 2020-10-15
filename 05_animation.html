@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    canvas{
+        display: block;
+        margin:0 auto;
+        border: 1px solid #000;
+    }
+    </style>
+<body>
+    <canvas class="canvas"></canvas>
+</body>
+<script>
+let  canele=document.querySelector('.canvas');
+console.log(canele)
+canele.width=540
+canele.height=600
+let ctx= canele.getContext('2d')
+//动画效果
+let x=0;
+let y=0;
+//X轴的移动距离
+let xDistance=2
+//y轴的移动距离
+let yDistance=2
+
+window.setInterval(()=>{
+    //擦除整个画布重新绘制操作
+ctx.clearRect(0,0,canele.width,canele.height)
+ctx.strokeRect(x,y,100,100)
+
+ctx.strokeText('中国',200,200)
+x+=xDistance
+y+=yDistance
+if(x>canele.width-100){
+    xDistance=-2
+}
+if(x<0){
+    xDistance=2
+}
+if(y>canele.height-100){
+    yDistance-=2
+}
+if(y<0){
+    yDistance+=2
+}
+},15)
+
+</script>
+</html>

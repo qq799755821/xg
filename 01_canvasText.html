@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <canvas id="canvas"></canvas>
+</body>
+<script>
+   let canvasEle=document.getElementById('canvas')
+  canvasEle.width=800;
+  canvasEle.height=480;
+  //获取canvas的上下文类型
+let ctx=canvasEle.getContext('2d')
+//在绘制之前设置颜色
+ctx.strokeStyle='red'
+//绘制描边锯形
+ctx.strokeRect(100,100,100,100)
+
+//设置字体大小
+ctx.font="40px Microsoft Yahei"
+
+ctx.fillStyle='yellow'
+//绘制填充矩形
+ctx.fillRect(200,200,150,50)
+   
+   //绘制描边文本
+   ctx.strokeText('马上下课了',100,150)
+   //绘制填充文本
+   ctx.font="80px  Microsoft Yahei"
+   ctx.fillText('hahah',150,300)
+</script>
+</html>

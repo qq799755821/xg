@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    canvas{
+        border: 1px solid #000;
+    }
+    </style>
+<body>
+    <canvas class="canvas"></canvas>
+
+    <script>
+let  canele=document.querySelector('.canvas');
+console.log(canele)
+canele.width=540
+canele.height=600
+let ctx= canele.getContext('2d')
+//通过beginOath()开始一条新的路径
+ctx.beginPath()
+//moveTo()定义起点
+ctx.moveTo(100,480)
+//通过lineTo()定义线段的终(起)点
+ctx.lineTo(150,40)
+ctx.lineTo(250,340)
+ctx.lineTo(350,200)
+//描边填充
+ctx.strokeStyle='red'
+ctx.stroke()
+
+
+
+    </script>
+</body>
+</html>

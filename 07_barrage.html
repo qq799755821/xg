@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    canvas{
+        display: block;
+        margin:0 auto;
+        border: 1px solid #000;
+    }
+    </style>
+<body>
+    <canvas class="canvas"></canvas>
+    <p style="text-align: center;">
+<button onclick="play()">播放</button>
+<button onclick="stop()">暂停</button>
+</p>
+<script>
+    let  canele=document.querySelector('.canvas');
+console.log(canele)
+canele.width=540
+canele.height=600
+let ctx= canele.getContext('2d')
+
+let x=canele.width
+
+let colors=['#c23531','#2f4554','#d48265','#666']
+//弹幕信息数组
+let barrages=[{
+    text:'下次一定',
+    speed:Math.ceil(Math.random()*3)+2,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    x:canele.width,
+    y:30
+},{
+    text:'嘤嘤嘤',
+    speed:Math.ceil(Math.random()*3)+2,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    x:canele.width,
+    y:60
+},{
+    text:'哈哈哈',
+    speed:Math.ceil(Math.random()*3)+2,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    x:canele.width,
+    y:90
+},{
+    text:'略略略',
+    speed:Math.ceil(Math.random()*3)+2,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    x:canele.width,
+    y:120
+},{
+    text:'嘎嘎嘎',
+    speed:Math.ceil(Math.random()*3)+2,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    x:canele.width,
+    y:150
+}]
+
+
+let timeID
+//间距
+let xDistance=2
+function animation(){
+    //擦除画布
+    ctx.clearRect(0,0,canele.width,canele.height)
+    //设置文本样式
+    ctx.font='16px Microsoft Yahei'
+    //多个对象逐一绘制
+    for(let i=0;i<barrages.length;i++){
+        //依次获取对象
+        let obj=barrages[i]
+    //设置文本颜色
+    ctx.fillStyle=obj.color
+    //绘制填充文本
+    ctx.fillText(obj.text,obj.x,obj.y)
+    obj.x-=obj.speed
+//获取弹幕对象的宽度
+let TextMetrics=ctx.measureText(obj.text)
+let TextWidth=TextMetrics.width
+
+if(obj.x<=-TextWidth){
+    //设置弹幕对象的X轴为画布的宽度,也就是最右侧
+    obj.x=canele.width
+}
+
+
+}
+   timeID= window.requestAnimationFrame(animation)
+}
+//标识开关
+let isPlay=false
+ function play(){
+if(!isPlay){
+    animation()
+}
+isPlay=true
+ }
+ function stop(){
+     if(isPlay){
+        window.cancelAnimationFrame(timeID)
+     }
+    isPlay=false 
+ }
+</script>
+</body>
+</html>

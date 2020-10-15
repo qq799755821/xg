@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body{
+      margin: 0;
+      padding: 0;
+    }
+    .container{
+      width: 640px;
+      margin: 0 auto;
+      border:1px solid #ccc;
+      position: relative;
+    }
+    .controls button{
+      border: none;
+      background-color:#0aa1eb ;
+      color:#fff;
+      outline: none;
+      display: inline-block;
+      padding:2px 10px;
+      border-radius: 3px;
+      font-size:12px;
+      font-family: 'Microsoft Yahei';
+      cursor: pointer;
+    }
+    #ad{
+      width: 400px;
+      height: 300px;
+      position: absolute;
+      z-index: 666;
+      left: 50%;
+      top:30px;
+      margin-left: -200px;
+    }
+    #app{
+      height: 5px;
+      width: 100%;
+      background-color: #666;
+      margin-bottom: 5px;
+    }
+    #appchalid{
+      height: 100%;
+      width: 0px;
+      background-color: #0aa1eb;
+    }
+    #mask{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width:640px;
+      height:360px;
+      z-index: 999;
+    }
+    .canvas{
+        position: absolute;
+       left: 0;
+       top: 0;
+        z-index: 444;
+        background-color: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="ad">
+      <img src="./resource/ad/0D0100005E0DB3591241923143384738.jpg" alt="">
+      <div id="mask"></div>
+    </div>
+    <canvas class="canvas"></canvas>
+  <video src="./resource/video/video.mp4" id="video" width="640" height="360"></video>
+  <div class="controls">
+    <div id="app">
+      <div id="appchalid"></div>
+    </div>
+    <span id="currentTime">00:00</span> /
+    <span id="total">/??:??</span>
+    <button onclick="playOrStorp()">播放/暂停</button>
+    <button onclick="incVolume()">增大音量</button>
+    <button onclick="decVolume()">减小音量</button>
+
+    <button onclick="changeplay('0.5')">0.5倍速</button>
+ <button onclick="changeplay(`1.0`)">1.0倍速</button>
+<button onclick="changeplay(`1.5`)">1.5倍速</button>
+<button onclick="changeplay(`2.0`)">2.0倍速</button>
+<button onclick="enterFullscreen()">进入</button>
+<button onclick="exitFullscreen()">退出</button>
+
+  </div>
+  </div>
+  <script>
+//模拟实现数据库图片路径
+let  imgarr=[
+  '0D0100005E0DB3591241923143384738.jpg',
+  '0D0100005E2EF493395059357930375A.jpg',
+  '0D0100005E4DDCB31126293290574D55.jpg',
+  '0D0100005E40CB833950593579383235.jpg',
+  '0D0100005E254C951831383513533435.jpg',
+  '0D0100005E42288F9115223570333345.jpg',
+  '0D0100005E588109395059360246315A.jpg'
+]
+let　videoElement=document.getElementById('video');
+let timeID
+
+let ad=document.getElementById('ad')
+//媒体对象播放时显示广告位对象
+videoElement.addEventListener('play',()=>{
+ad.style.display="none"
+animation()
+})
+
+//媒体对象暂停时隐藏广告位对象
+videoElement.addEventListener('pause',()=>{
+ad.style.display="block";
+//获取随机路径
+let filename= imgarr[parseInt(Math.random()*imgarr.length)] 
+//随机修改图片路径
+document.getElementsByTagName('img')[0].src=`./resource/ad/${filename}`
+//console.log(document.getElementsByTagName('img')[0])
+//暂停关闭弹幕
+ window.cancelAnimationFrame(timeID)
+ //暂停定时清理画布
+ window.setInterval(()=>{
+    ctx.clearRect(0,0,canele.width,canele.height)
+ },3000)
+ 
+})
+
+
+
+
+     //获取播放容器对象
+  let divEle=document.querySelector('.container')
+
+//进入全屏
+function enterFullscreen(){
+  console.log(divEle)
+  divEle.requestFullscreen()
+}
+//退出全屏
+function exitFullscreen(){
+  divEle.exitFullscreen()
+}
+
+
+
+let total=document.getElementById('total')
+let currentTime=document.getElementById('currentTime')
+
+//在第一帧加载完成后触发
+videoElement.onloadeddata=function(){
+ //获取当前媒体播放时间
+  currentTime.innerText=videoElement.currentTime
+ //获取当前媒体总时长
+ duration=parseInt(videoElement.duration)
+ total.innerText= duration
+  console.log(videoElement.duration)
+ 
+}
+
+//在媒体对象的currentTime发生改变时触发
+videoElement.addEventListener('timeupdate',()=>{
+  //当前播放时长
+  currentTime.innerText=parseInt( videoElement.currentTime)
+  
+  //获取进度条
+  let  appchalid=document.getElementById('appchalid')
+  //进度条宽度=视频宽度*(当前时长/总时长)
+  appchalid.style.width=videoElement.width*(videoElement.currentTime/videoElement.duration)+ "px"
+  console.log(appchalid.style.width)
+  
+
+
+})
+
+//媒体对象播放速率修改
+function changeplay(value){
+    value=parseFloat(value);
+    videoElement.playbackRate=value
+    console.log(value)
+}
+
+
+
+
+//增大音量
+function incVolume(){
+  //音量不过1,取最小值
+  videoElement.volume=Math.min(1,videoElement.volume+0.1)
+  console.log(videoElement.volume)
+}
+//减小音量
+function decVolume(){
+  //音量不小于0 ,取最大值
+  videoElement.volume=Math.max(0,videoElement.volume-0.1)
+
+  console.log(videoElement.volume)
+}
+
+
+
+
+
+    //播放或者暂停
+        function playOrStorp(){
+         
+          //无论是正常暂停还是播放完毕造成的暂停
+          if(videoElement.paused || videoElement.ended){
+            videoElement.play()
+          }else{
+            videoElement.pause()
+          }
+
+
+
+        }
+
+
+
+        let  canele=document.querySelector('.canvas');
+console.log(canele)
+canele.width=videoElement.width
+canele.height=videoElement.height
+let ctx= canele.getContext('2d')
+
+let x=canele.width
+
+let colors=['#c23531','#2f4554','#d48265','#666']
+//弹幕信息数组
+let barrages=[{
+    text:'下次一定',
+    speed:Math.ceil(Math.random()*3)+2,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    x:canele.width,
+    y:30
+},{
+    text:'嘤嘤嘤',
+    speed:Math.ceil(Math.random()*3)+2,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    x:canele.width,
+    y:60
+},{
+    text:'哈哈哈',
+    speed:Math.ceil(Math.random()*3)+2,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    x:canele.width,
+    y:90
+},{
+    text:'略略略',
+    speed:Math.ceil(Math.random()*3)+1,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    x:canele.width,
+    y:120
+},{
+    text:'嘎嘎嘎',
+    speed:Math.ceil(Math.random()*3)+2,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    x:canele.width,
+    y:150
+}]
+
+
+
+//间距
+let xDistance=2
+function animation(){
+    //擦除画布
+    ctx.clearRect(0,0,canele.width,canele.height)
+    //设置文本样式
+    ctx.font='16px Microsoft Yahei'
+    //多个对象逐一绘制
+    for(let i=0;i<barrages.length;i++){
+        //依次获取对象
+        let obj=barrages[i]
+    //设置文本颜色
+    ctx.fillStyle=obj.color
+    //绘制填充文本
+    ctx.fillText(obj.text,obj.x,obj.y)
+    obj.x-=obj.speed
+//获取弹幕对象的宽度
+let TextMetrics=ctx.measureText(obj.text)
+let TextWidth=TextMetrics.width
+
+if(obj.x<=-TextWidth){
+    //设置弹幕对象的X轴为画布的宽度,也就是最右侧
+    obj.x=canele.width
+}
+
+
+}
+timeID= window.requestAnimationFrame(animation)
+}
+
+  </script>
+</body>
+</html>
